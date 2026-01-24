@@ -1,0 +1,5 @@
+{
+  "name": "X360 AI Agent Demo",
+  "description": "An intelligent operational agent that uses the Ask, Tell, Do philosophy to manage data chaos, detect SLA breaches, and identify data conflicts using Gemini 1.5 Pro/Flash.",
+  "requestFramePermissions": []
+}
