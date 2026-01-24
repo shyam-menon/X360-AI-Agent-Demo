@@ -1,0 +1,79 @@
+[
+  {
+    "id": "TKT-99",
+    "customer": "Acme Corp",
+    "title": "Server Outage - Production",
+    "status": "Open",
+    "priority": "Critical",
+    "createdDate": "2025-12-30",
+    "dueDate": "2026-01-19",
+    "source": "Jira",
+    "assignee": "Unassigned"
+  },
+  {
+    "id": "TKT-101",
+    "customer": "Globex Inc",
+    "title": "License Renewal Failure",
+    "status": "Closed",
+    "priority": "High",
+    "createdDate": "2026-01-22",
+    "dueDate": "2026-01-29",
+    "source": "Salesforce",
+    "assignee": "Sarah Connor"
+  },
+  {
+    "id": "TKT-101",
+    "customer": "Globex Inc",
+    "title": "License Renewal Failure",
+    "status": "Pending Vendor",
+    "priority": "High",
+    "createdDate": "2026-01-22",
+    "dueDate": "2026-01-29",
+    "source": "ServiceNow",
+    "assignee": "Sarah Connor"
+  },
+  {
+    "id": "TKT-105",
+    "customer": "Soylent Corp",
+    "title": "Password Reset Request",
+    "status": "Open",
+    "priority": "Low",
+    "createdDate": "2026-01-24",
+    "dueDate": "2026-01-26",
+    "source": "Zendesk",
+    "assignee": "Helpdesk Bot"
+  },
+  {
+    "id": "TKT-108",
+    "customer": "Massive Dynamic",
+    "title": "API Latency Spike",
+    "status": "Resolved",
+    "priority": "Medium",
+    "createdDate": "2026-01-23",
+    "dueDate": "2026-01-25",
+    "source": "Datadog",
+    "assignee": "DevOps Team"
+  },
+  {
+    "id": "TKT-108",
+    "customer": "Massive Dynamic",
+    "title": "API Latency Spike",
+    "status": "Open",
+    "priority": "Critical",
+    "createdDate": "2026-01-23",
+    "dueDate": "2026-01-25",
+    "source": "PagerDuty",
+    "assignee": "OnCall Eng"
+  },
+  {
+    "id": "TKT-112",
+    "customer": "Initech",
+    "title": "Printer Load Letter Error",
+    "status": "Open",
+    "priority": "Medium",
+    "createdDate": "2026-01-14",
+    "dueDate": "2026-01-24",
+    "source": "ServiceNow",
+    "assignee": "Michael Bolton"
+  }
+]

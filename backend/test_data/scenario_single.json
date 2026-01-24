@@ -1,0 +1,13 @@
+[
+  {
+    "id": "TKT-999",
+    "customer": "Single Ticket Test",
+    "title": "Lone Ticket for Edge Case Testing",
+    "status": "Open",
+    "priority": "Medium",
+    "createdDate": "2026-01-23",
+    "dueDate": "2026-01-30",
+    "source": "Zendesk",
+    "assignee": "Solo Agent"
+  }
+]

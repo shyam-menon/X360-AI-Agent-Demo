@@ -14,10 +14,10 @@ class Settings(BaseSettings):
     aws_secret_access_key: Optional[str] = None
     aws_default_region: str = "us-east-1"
 
-    # Bedrock Models
-    bedrock_model_briefing: str = "us.anthropic.claude-sonnet-4-20250514"
-    bedrock_model_chat: str = "us.amazon.nova-lite-v1:0"
-    bedrock_model_action: str = "us.anthropic.claude-sonnet-4-20250514"
+    # Bedrock Models (using Nova only - Claude restricted)
+    bedrock_model_briefing: str = "amazon.nova-pro-v1:0"
+    bedrock_model_chat: str = "amazon.nova-lite-v1:0"
+    bedrock_model_action: str = "amazon.nova-pro-v1:0"
 
     # API Configuration
     api_host: str = "0.0.0.0"

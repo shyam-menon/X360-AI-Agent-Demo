@@ -1,0 +1,145 @@
+[
+  {
+    "id": "TKT-300",
+    "customer": "Banking Corp",
+    "title": "Database Outage - Critical Systems Down",
+    "status": "Open",
+    "priority": "Critical",
+    "createdDate": "2026-01-10",
+    "dueDate": "2026-01-15",
+    "source": "PagerDuty",
+    "assignee": "Unassigned"
+  },
+  {
+    "id": "TKT-301",
+    "customer": "E-Commerce Platform",
+    "title": "Payment Gateway Failure",
+    "status": "Open",
+    "priority": "Critical",
+    "createdDate": "2026-01-12",
+    "dueDate": "2026-01-17",
+    "source": "Datadog",
+    "assignee": "Unassigned"
+  },
+  {
+    "id": "TKT-302",
+    "customer": "Healthcare Network",
+    "title": "Patient Data Access Issue",
+    "status": "Open",
+    "priority": "Critical",
+    "createdDate": "2026-01-08",
+    "dueDate": "2026-01-13",
+    "source": "ServiceNow",
+    "assignee": "Emergency Team"
+  },
+  {
+    "id": "TKT-303",
+    "customer": "Insurance Group",
+    "title": "Claims Processing System Down",
+    "status": "In Progress",
+    "priority": "High",
+    "createdDate": "2026-01-14",
+    "dueDate": "2026-01-20",
+    "source": "Jira",
+    "assignee": "DevOps Alpha"
+  },
+  {
+    "id": "TKT-303",
+    "customer": "Insurance Group",
+    "title": "Claims Processing System Down",
+    "status": "Open",
+    "priority": "Critical",
+    "createdDate": "2026-01-14",
+    "dueDate": "2026-01-20",
+    "source": "PagerDuty",
+    "assignee": "On-Call Engineer"
+  },
+  {
+    "id": "TKT-304",
+    "customer": "Logistics Company",
+    "title": "Shipment Tracking Outage",
+    "status": "Open",
+    "priority": "High",
+    "createdDate": "2026-01-16",
+    "dueDate": "2026-01-22",
+    "source": "Zendesk",
+    "assignee": "Support Team"
+  },
+  {
+    "id": "TKT-304",
+    "customer": "Logistics Company",
+    "title": "Shipment Tracking Outage",
+    "status": "Resolved",
+    "priority": "Medium",
+    "createdDate": "2026-01-16",
+    "dueDate": "2026-01-22",
+    "source": "Jira",
+    "assignee": "Dev Team"
+  },
+  {
+    "id": "TKT-305",
+    "customer": "Telecom Provider",
+    "title": "Network Infrastructure Failure",
+    "status": "Open",
+    "priority": "Critical",
+    "createdDate": "2026-01-11",
+    "dueDate": "2026-01-16",
+    "source": "Datadog",
+    "assignee": "Network Team"
+  },
+  {
+    "id": "TKT-306",
+    "customer": "Media Streaming",
+    "title": "Video Service Degradation",
+    "status": "Open",
+    "priority": "High",
+    "createdDate": "2026-01-13",
+    "dueDate": "2026-01-19",
+    "source": "PagerDuty",
+    "assignee": "Platform Team"
+  },
+  {
+    "id": "TKT-307",
+    "customer": "Social Network",
+    "title": "Authentication Service Down",
+    "status": "Open",
+    "priority": "Critical",
+    "createdDate": "2026-01-09",
+    "dueDate": "2026-01-14",
+    "source": "Datadog",
+    "assignee": "Security Team"
+  },
+  {
+    "id": "TKT-308",
+    "customer": "Cloud Storage",
+    "title": "Data Sync Failures",
+    "status": "In Progress",
+    "priority": "High",
+    "createdDate": "2026-01-15",
+    "dueDate": "2026-01-21",
+    "source": "ServiceNow",
+    "assignee": "Cloud Ops"
+  },
+  {
+    "id": "TKT-308",
+    "customer": "Cloud Storage",
+    "title": "Data Sync Failures",
+    "status": "Open",
+    "priority": "High",
+    "createdDate": "2026-01-15",
+    "dueDate": "2026-01-21",
+    "source": "Zendesk",
+    "assignee": "Support Engineer"
+  },
+  {
+    "id": "TKT-309",
+    "customer": "Gaming Platform",
+    "title": "Server Connectivity Issues",
+    "status": "Open",
+    "priority": "Medium",
+    "createdDate": "2026-01-17",
+    "dueDate": "2026-01-23",
+    "source": "Jira",
+    "assignee": "Game Ops"
+  }
+]

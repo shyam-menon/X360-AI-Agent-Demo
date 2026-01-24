@@ -1,0 +1,68 @@
+[
+  {
+    "id": "TKT-200",
+    "customer": "Tech Solutions Inc",
+    "title": "Software License Upgrade",
+    "status": "In Progress",
+    "priority": "Medium",
+    "createdDate": "2026-01-20",
+    "dueDate": "2026-02-15",
+    "source": "Salesforce",
+    "assignee": "Alice Johnson"
+  },
+  {
+    "id": "TKT-201",
+    "customer": "Global Retail Corp",
+    "title": "User Training Request",
+    "status": "Open",
+    "priority": "Low",
+    "createdDate": "2026-01-22",
+    "dueDate": "2026-02-01",
+    "source": "Zendesk",
+    "assignee": "Bob Smith"
+  },
+  {
+    "id": "TKT-202",
+    "customer": "Financial Services LLC",
+    "title": "API Integration Support",
+    "status": "In Progress",
+    "priority": "High",
+    "createdDate": "2026-01-15",
+    "dueDate": "2026-01-30",
+    "source": "Jira",
+    "assignee": "Charlie Davis"
+  },
+  {
+    "id": "TKT-203",
+    "customer": "Healthcare Partners",
+    "title": "Security Compliance Review",
+    "status": "Open",
+    "priority": "Medium",
+    "createdDate": "2026-01-23",
+    "dueDate": "2026-02-10",
+    "source": "ServiceNow",
+    "assignee": "Diana Martinez"
+  },
+  {
+    "id": "TKT-204",
+    "customer": "Manufacturing Co",
+    "title": "Email Configuration Update",
+    "status": "Resolved",
+    "priority": "Low",
+    "createdDate": "2026-01-10",
+    "dueDate": "2026-01-20",
+    "source": "Zendesk",
+    "assignee": "Eve Wilson"
+  },
+  {
+    "id": "TKT-205",
+    "customer": "Education Institute",
+    "title": "Dashboard Customization",
+    "status": "In Progress",
+    "priority": "Medium",
+    "createdDate": "2026-01-18",
+    "dueDate": "2026-02-05",
+    "source": "Salesforce",
+    "assignee": "Frank Brown"
+  }
+]

@@ -1,0 +1,35 @@
+[
+  {
+    "id": "TKT-400",
+    "customer": "Edge Case Corp",
+    "title": "All Critical Priority Test Ticket 1",
+    "status": "Open",
+    "priority": "Critical",
+    "createdDate": "2026-01-20",
+    "dueDate": "2026-02-01",
+    "source": "Jira",
+    "assignee": "Test User"
+  },
+  {
+    "id": "TKT-401",
+    "customer": "Edge Case Corp",
+    "title": "All Critical Priority Test Ticket 2",
+    "status": "In Progress",
+    "priority": "Critical",
+    "createdDate": "2026-01-21",
+    "dueDate": "2026-02-02",
+    "source": "Jira",
+    "assignee": "Test User"
+  },
+  {
+    "id": "TKT-402",
+    "customer": "Edge Case Corp",
+    "title": "All Critical Priority Test Ticket 3",
+    "status": "Open",
+    "priority": "Critical",
+    "createdDate": "2026-01-22",
+    "dueDate": "2026-02-03",
+    "source": "Jira",
+    "assignee": "Test User"
+  }
+]

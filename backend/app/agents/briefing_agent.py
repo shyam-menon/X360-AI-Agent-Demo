@@ -27,8 +27,10 @@ class BriefingAgent:
     """Agent for analyzing data and generating morning briefings."""
 
     def __init__(self):
+        model_id = os.getenv("BEDROCK_MODEL_BRIEFING", "amazon.nova-pro-v1:0")
+        print(f"[DEBUG] BriefingAgent initializing with model: {model_id}")
         self.agent = Agent(
-            model=os.getenv("BEDROCK_MODEL_BRIEFING", "us.anthropic.claude-sonnet-4-20250514"),
+            model=model_id,
             system_prompt=SYSTEM_INSTRUCTION_NIGHT_WATCHMAN
         )
 
@@ -58,31 +60,54 @@ DATA:
 {data_context}
 
 Identify:
-1. SLA breaches (tickets near or past due date)
-2. Data conflicts (duplicate tickets, inconsistent statuses)
+1. SLA breaches (tickets near or past due date - compare dueDate to today's date 2026-01-24)
+2. Data conflicts (duplicate tickets with same ID but different statuses or priorities)
 3. Important insights (patterns, urgent items)
 
-Return JSON matching this structure:
+IMPORTANT: Return ONLY valid JSON matching this exact structure (no markdown, no code blocks, just raw JSON):
 {{
   "summary": "Brief overview of system health",
   "items": [
     {{
       "id": "unique_id",
-      "type": "SLA_BREACH | DATA_CONFLICT | INSIGHT",
+      "type": "SLA_BREACH or DATA_CONFLICT or INSIGHT",
       "title": "Short title",
       "description": "Detailed description",
-      "severity": "CRITICAL | HIGH | MEDIUM | LOW",
+      "severity": "CRITICAL or HIGH or MEDIUM or LOW",
       "relatedTicketIds": ["ticket_id_1", "ticket_id_2"],
       "suggestedAction": "What to do about it"
     }}
   ]
 }}
+
+Return only the JSON object, nothing else.
 """
 
-        # Use extract() for structured output
+        # Call agent and parse JSON response
         try:
-            result = self.agent.extract(BriefingOutput, prompt)
-            return result.model_dump()
+            response = self.agent(prompt)
+            response_text = str(response)
+
+            # Try to parse JSON from response
+            # Remove markdown code blocks if present
+            if "```json" in response_text:
+                start = response_text.find("```json") + 7
+                end = response_text.find("```", start)
+                response_text = response_text[start:end].strip()
+            elif "```" in response_text:
+                start = response_text.find("```") + 3
+                end = response_text.find("```", start)
+                response_text = response_text[start:end].strip()
+
+            # Parse JSON
+            result = json.loads(response_text)
+
+            # Validate structure
+            if 'summary' not in result or 'items' not in result:
+                raise ValueError("Response missing required fields")
+
+            return result
+
         except Exception as e:
             print(f"Briefing agent error: {e}")
             return {
