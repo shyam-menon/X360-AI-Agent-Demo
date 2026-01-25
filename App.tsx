@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { runMorningBriefing, sendChatMessage } from './services/geminiService';
+import { runMorningBriefing, sendChatMessage } from './services/backendService';
 import { BriefingResponse, ChatMessage, ViewMode, BriefingItem } from './types';
 import { RAW_CHAOTIC_DATA } from './constants';
 import { Dashboard } from './components/Dashboard';
@@ -25,7 +25,7 @@ function App() {
       // Run the API call and the animation timer in parallel
       // This ensures the animation shows for at least 800ms but doesn't delay the API call
       const minAnimationTime = new Promise(resolve => setTimeout(resolve, 800));
-      const briefingRequest = runMorningBriefing();
+      const briefingRequest = runMorningBriefing(RAW_CHAOTIC_DATA);
 
       const [_, result] = await Promise.all([minAnimationTime, briefingRequest]);
       
@@ -59,9 +59,14 @@ function App() {
     const newHistory = [...currentHistory, { role: 'user', content: msg, timestamp: Date.now() } as ChatMessage];
     setHistory(newHistory);
 
-    // Get response
-    const response = await sendChatMessage(newHistory, msg);
-    
+    // Get response - pass mode and context to backend
+    const response = await sendChatMessage(
+      newHistory,
+      msg,
+      isDoMode ? 'DO' : 'ASK',
+      { data: RAW_CHAOTIC_DATA, briefing: briefing || undefined }
+    );
+
     // Update with response
     setHistory(prev => [
       ...prev,
@@ -80,7 +85,12 @@ function App() {
     setIsChatTyping(true);
 
     // 3. Trigger the response from the model in the Actions context
-    const response = await sendChatMessage(newHistory, command);
+    const response = await sendChatMessage(
+      newHistory,
+      command,
+      'DO',
+      { data: RAW_CHAOTIC_DATA, briefing: briefing || undefined }
+    );
     
     setActionHistory(prev => [
       ...prev,

@@ -31,9 +31,11 @@ async def send_chat_message(request: ChatRequest):
             response_text = await action_agent.execute(request.message, request.context or {})
         else:
             # Use chat agent for ASK mode
+            # Convert Pydantic models to dicts for the agent
+            history_dicts = [msg.model_dump() for msg in request.history]
             response_text = await chat_agent.chat(
                 message=request.message,
-                history=request.history,
+                history=history_dicts,
                 context=request.context or {}
             )
 
