@@ -26,10 +26,13 @@ class ChatAgent:
     """Agent for handling ASK mode chat interactions."""
 
     def __init__(self):
+        model_id = os.getenv("BEDROCK_MODEL_CHAT", "amazon.nova-lite-v1:0")
+        print(f"[DEBUG] ChatAgent initializing with model: {model_id}")
         self.agent = Agent(
-            model=os.getenv("BEDROCK_MODEL_CHAT", "us.amazon.nova-lite-v1:0"),
+            model=model_id,
             system_prompt=SYSTEM_INSTRUCTION_CHAT
         )
+        self.model = model_id
 
     @tool
     def query_tickets(self, ticket_ids: List[str], context_data: dict) -> List[dict]:
@@ -52,8 +55,8 @@ class ChatAgent:
 
         # Add tools with context
         agent_with_tools = Agent(
-            model=self.agent.model,
-            system_prompt=self.agent.system_prompt,
+            model=self.model,
+            system_prompt=SYSTEM_INSTRUCTION_CHAT,
             tools=[self.query_tickets]
         )
 

@@ -1,0 +1,31 @@
+{
+  "message": "What tickets are overdue?",
+  "history": [],
+  "mode": "ASK",
+  "context": {
+    "data": [
+      {
+        "id": "TKT-99",
+        "customer": "Acme Corp",
+        "title": "Server Outage - Production",
+        "status": "Open",
+        "priority": "Critical",
+        "createdDate": "2025-12-30",
+        "dueDate": "2026-01-19",
+        "source": "Jira",
+        "assignee": "Unassigned"
+      },
+      {
+        "id": "TKT-112",
+        "customer": "Initech",
+        "title": "Printer Load Letter Error",
+        "status": "Open",
+        "priority": "Medium",
+        "createdDate": "2026-01-22",
+        "dueDate": "2026-01-24",
+        "source": "ServiceNow",
+        "assignee": "Michael Bolton"
+      }
+    ]
+  }
+}

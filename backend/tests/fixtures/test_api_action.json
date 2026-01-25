@@ -1,0 +1,20 @@
+{
+  "message": "Update TKT-99 status to In Progress",
+  "history": [],
+  "mode": "DO",
+  "context": {
+    "data": [
+      {
+        "id": "TKT-99",
+        "customer": "Acme Corp",
+        "title": "Server Outage - Production",
+        "status": "Open",
+        "priority": "Critical",
+        "createdDate": "2025-12-30",
+        "dueDate": "2026-01-19",
+        "source": "Jira",
+        "assignee": "Unassigned"
+      }
+    ]
+  }
+}

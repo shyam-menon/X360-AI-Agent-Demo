@@ -27,10 +27,13 @@ class ActionAgent:
     """Agent for handling DO mode action execution."""
 
     def __init__(self):
+        model_id = os.getenv("BEDROCK_MODEL_ACTION", "amazon.nova-pro-v1:0")
+        print(f"[DEBUG] ActionAgent initializing with model: {model_id}")
         self.agent = Agent(
-            model=os.getenv("BEDROCK_MODEL_ACTION", "us.anthropic.claude-sonnet-4-20250514"),
+            model=model_id,
             system_prompt=SYSTEM_INSTRUCTION_ACTIONS
         )
+        self.model = model_id
 
     @tool
     def update_ticket_status(self, ticket_id: str, new_status: str, reason: str) -> dict:
@@ -78,8 +81,8 @@ class ActionAgent:
 
         # Create agent with action tools
         agent_with_tools = Agent(
-            model=self.agent.model,
-            system_prompt=self.agent.system_prompt,
+            model=self.model,
+            system_prompt=SYSTEM_INSTRUCTION_ACTIONS,
             tools=[
                 self.update_ticket_status,
                 self.trigger_automation,
