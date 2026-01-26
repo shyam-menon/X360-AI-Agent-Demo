@@ -15,23 +15,23 @@ interface ChatInterfaceProps {
 
 const PROMPT_LIBRARY = [
   {
-    title: "SLA Impact Analysis",
-    prompt: "Analyze the current dataset for SLA breaches. Which customers are most affected, and what is the total potential financial impact?",
-    icon: Activity
-  },
-  {
-    title: "Cross-System Conflict Check",
-    prompt: "Scan all tickets for data inconsistencies between ServiceNow, Salesforce, and Jira. List the specific IDs and the conflicting fields.",
-    icon: Layers
-  },
-  {
-    title: "Root Cause Hypotheses",
-    prompt: "Based on the ticket titles and priorities, generate 3 likely root causes for the recent spike in critical issues.",
+    title: "Overdue Tickets",
+    prompt: "What tickets are overdue?",
     icon: AlertTriangle
   },
   {
-    title: "Executive Status Report",
-    prompt: "Draft a brief executive summary of operational health for the CTO, highlighting risks and required actions.",
+    title: "MPS Resources",
+    prompt: "Where can I find MPS resources?",
+    icon: Layers
+  },
+  {
+    title: "MDS Resources",
+    prompt: "Where can I find MDS resources?",
+    icon: Activity
+  },
+  {
+    title: "Critical Priority",
+    prompt: "Which tickets are Critical priority?",
     icon: MessageSquare
   }
 ];

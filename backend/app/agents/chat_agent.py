@@ -4,7 +4,7 @@ Chat Agent - Handles ASK mode interactions.
 
 from strands import Agent
 from strands.tools import tool
-from strands_tools import retrieve
+from strands_tools import retrieve, current_time
 from typing import List, Dict
 import os
 import json
@@ -37,10 +37,27 @@ Use for questions requiring documentation or best practices:
 - General knowledge not in ticket data
 When calling retrieve, use the 'text' parameter with your query.
 
+### current_time
+Use to get the current date and time when needed for:
+- Determining if tickets are overdue
+- Calculating time-based SLA breaches
+- Any date/time comparisons
+
 ## Decision Guidelines:
 1. **Ticket-specific queries** → use query_tickets
 2. **Knowledge/how-to queries** → use retrieve
 3. **Hybrid queries** → use both tools (e.g., "What's wrong with TKT-101 and how do I fix it?")
+
+## Line of Business Clarification:
+Policies and procedures differ between lines of business:
+- **MPS** (Managed Print Services) - printer and print-related services
+- **MDS** (Managed Device Services) - device and hardware-related services
+- **MCS** (Managed Collaboration Services) - collaboration and communication services
+
+When a user asks about policies, procedures, SLAs, or compliance and it is NOT clear which line of business they are referring to, ask a clarifying question before providing an answer. For example:
+- "Are you asking about MPS (Managed Print Services), MDS (Managed Device Services), or MCS (Managed Collaboration Services)?"
+
+If the context (e.g., ticket data, previous conversation) makes the line of business clear, proceed without asking.
 
 Be concise and actionable. Reference specific ticket IDs when relevant.
 """
@@ -87,7 +104,7 @@ class ChatAgent:
         agent_with_tools = Agent(
             model=self.model,
             system_prompt=SYSTEM_INSTRUCTION_CHAT,
-            tools=[self.query_tickets, retrieve]
+            tools=[self.query_tickets, retrieve, current_time]
         )
 
         # Build conversation context
