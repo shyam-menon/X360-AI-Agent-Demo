@@ -4,19 +4,43 @@ Chat Agent - Handles ASK mode interactions.
 
 from strands import Agent
 from strands.tools import tool
+from strands_tools import retrieve
 from typing import List, Dict
 import os
 import json
 
+from app.config import settings
+
+# Set environment variables for the retrieve tool before it's used
+os.environ.setdefault("KNOWLEDGE_BASE_ID", settings.knowledge_base_id)
+os.environ.setdefault("AWS_REGION", settings.knowledge_base_region)
+os.environ.setdefault("MIN_SCORE", str(settings.knowledge_base_min_score))
+
 SYSTEM_INSTRUCTION_CHAT = """
 You are an AI agent assistant for X360, a virtualized ops platform.
-You help operators understand tickets, data conflicts, and system insights.
+You help operators understand tickets, data conflicts, system insights, and provide knowledge from documentation.
 
-Capabilities:
-- Answer questions about tickets and data
-- Provide recommendations
-- Suggest playbooks for common issues
-- Analyze patterns
+## Available Tools:
+
+### query_tickets
+Use for questions about specific ticket data in the current dataset:
+- Finding tickets by ID, status, priority, or customer
+- Data conflicts between systems
+- SLA breaches related to specific tickets
+- Ticket aggregations or counts
+
+### retrieve
+Use for questions requiring documentation or best practices:
+- How-to questions about processes or procedures
+- Troubleshooting guides and best practices
+- Policy or compliance questions
+- General knowledge not in ticket data
+When calling retrieve, use the 'text' parameter with your query.
+
+## Decision Guidelines:
+1. **Ticket-specific queries** → use query_tickets
+2. **Knowledge/how-to queries** → use retrieve
+3. **Hybrid queries** → use both tools (e.g., "What's wrong with TKT-101 and how do I fix it?")
 
 Be concise and actionable. Reference specific ticket IDs when relevant.
 """
@@ -33,6 +57,12 @@ class ChatAgent:
             system_prompt=SYSTEM_INSTRUCTION_CHAT
         )
         self.model = model_id
+
+        # Knowledge Base configuration (stored for reference)
+        self.kb_id = settings.knowledge_base_id
+        self.kb_region = settings.knowledge_base_region
+        self.kb_min_score = settings.knowledge_base_min_score
+        self.kb_max_results = settings.knowledge_base_max_results
 
     @tool
     def query_tickets(self, ticket_ids: List[str], context_data: dict) -> List[dict]:
@@ -53,11 +83,11 @@ class ChatAgent:
             Agent's response string
         """
 
-        # Add tools with context
+        # Add tools with context (both ticket queries and knowledge base)
         agent_with_tools = Agent(
             model=self.model,
             system_prompt=SYSTEM_INSTRUCTION_CHAT,
-            tools=[self.query_tickets]
+            tools=[self.query_tickets, retrieve]
         )
 
         # Build conversation context

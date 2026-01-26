@@ -15,7 +15,10 @@ An AI-powered operational assistant that monitors and manages tickets across mul
 ## Features
 
 - **TELL Mode (Dashboard)** - Morning briefing with SLA breaches, data conflicts, and insights
-- **ASK Mode (Agent)** - Natural language Q&A about tickets and system data
+- **ASK Mode (Agent)** - Natural language Q&A about tickets, system data, and knowledge base
+  - Structured queries for ticket data analysis
+  - Knowledge base retrieval for documentation and procedures
+  - Hybrid queries combining both sources
 - **DO Mode (Actions)** - Execute operational commands and automations
 - **DATA Mode (Viewer)** - View raw virtualization layer data
 
@@ -87,7 +90,15 @@ API_PORT=8000
 
 # CORS - Add your frontend URLs (comma-separated)
 CORS_ORIGINS=http://localhost:3000,http://localhost:5173
+
+# Knowledge Base Configuration (for ASK mode documentation queries)
+KNOWLEDGE_BASE_ID=WKSR8FEXOD
+KNOWLEDGE_BASE_REGION=us-west-2
+KNOWLEDGE_BASE_MIN_SCORE=0.4
+KNOWLEDGE_BASE_MAX_RESULTS=5
 ```
+
+> **Note:** The Knowledge Base region (`us-west-2`) may differ from your default AWS region. The chat agent handles this automatically.
 
 #### Frontend Configuration
 
@@ -178,7 +189,9 @@ The application has 4 modes accessible via the bottom navigation bar. Here's how
 
 ### ASK Mode (Agent) - Q&A Chat
 
-**What it does:** Natural language Q&A about tickets, data, and system insights.
+**What it does:** Natural language Q&A combining:
+- Structured ticket data queries
+- Knowledge base retrieval for documentation and procedures
 
 **How to test:**
 
@@ -188,19 +201,25 @@ The application has 4 modes accessible via the bottom navigation bar. Here's how
 
 **Sample questions to try:**
 
-| Question | Expected Response |
-|----------|-------------------|
-| "What tickets are overdue?" | Lists TKT-99 and TKT-112 with details |
-| "Tell me about TKT-101" | Explains the data conflict between systems |
-| "Which tickets are Critical priority?" | Lists TKT-99 and TKT-108 |
-| "What should I prioritize today?" | Recommends focusing on SLA breaches first |
-| "Summarize the data conflicts" | Explains TKT-101 and TKT-108 conflicts |
-| "Who is assigned to the server outage?" | Shows TKT-99 is unassigned |
+| Question Type | Question | Expected Response |
+|--------------|----------|-------------------|
+| Ticket Query | "What tickets are overdue?" | Lists TKT-99 and TKT-112 with details |
+| Ticket Query | "Tell me about TKT-101" | Explains the data conflict between systems |
+| Ticket Query | "Which tickets are Critical priority?" | Lists TKT-99 and TKT-108 |
+| Knowledge Base | "How do I resolve a data sync conflict?" | Retrieves procedure from knowledge base |
+| Knowledge Base | "What is the escalation procedure?" | Retrieves escalation policy documentation |
+| Hybrid | "What's wrong with TKT-101 and how do I fix it?" | Combines ticket data with resolution procedures |
+| Hybrid | "For the SLA breach, what should I do next?" | Analyzes ticket, recommends KB-based actions |
 
 **Multi-turn conversation test:**
 1. Ask: "What tickets are from Acme Corp?"
 2. Follow up: "What's the status of that ticket?"
 3. The agent should remember context from the previous question
+
+**Knowledge + Ticket flow test:**
+1. Ask: "What data conflicts exist?"
+2. Follow up: "How do I resolve the Salesforce sync conflict?"
+3. The agent uses both ticket data and knowledge base to provide comprehensive guidance
 
 ---
 

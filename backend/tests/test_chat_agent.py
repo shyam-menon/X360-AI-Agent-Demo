@@ -131,6 +131,74 @@ ASK_MODE_QUESTIONS = [
         "category": "Pattern Recognition",
         "expected_keywords": ["Acme Corp", "urgent", "critical"],
         "expected_tickets": ["TKT-99"]
+    },
+
+    # Knowledge Base Queries
+    {
+        "id": 16,
+        "question": "How do I resolve a data sync conflict?",
+        "category": "Knowledge Base",
+        "expected_keywords": ["sync", "conflict", "resolve"],
+        "expected_tickets": [],
+        "uses_kb": True
+    },
+    {
+        "id": 17,
+        "question": "What is the escalation procedure for critical issues?",
+        "category": "Knowledge Base",
+        "expected_keywords": ["escalation", "procedure", "critical"],
+        "expected_tickets": [],
+        "uses_kb": True
+    },
+    {
+        "id": 18,
+        "question": "What are the SLA policies for high priority tickets?",
+        "category": "Knowledge Base",
+        "expected_keywords": ["SLA", "policy", "priority"],
+        "expected_tickets": [],
+        "uses_kb": True
+    },
+    {
+        "id": 19,
+        "question": "How do I configure ServiceNow integration?",
+        "category": "Knowledge Base",
+        "expected_keywords": ["ServiceNow", "integration", "configure"],
+        "expected_tickets": [],
+        "uses_kb": True
+    },
+    {
+        "id": 20,
+        "question": "What troubleshooting steps should I follow for Datadog alerts?",
+        "category": "Knowledge Base",
+        "expected_keywords": ["troubleshoot", "Datadog", "steps"],
+        "expected_tickets": [],
+        "uses_kb": True
+    },
+
+    # Hybrid Queries (both ticket data and knowledge base)
+    {
+        "id": 21,
+        "question": "Tell me about TKT-101 and how to resolve its conflict",
+        "category": "Hybrid",
+        "expected_keywords": ["TKT-101", "conflict", "resolve"],
+        "expected_tickets": ["TKT-101"],
+        "uses_kb": True
+    },
+    {
+        "id": 22,
+        "question": "What's the recommended procedure for the SLA breach on TKT-99?",
+        "category": "Hybrid",
+        "expected_keywords": ["TKT-99", "SLA", "procedure"],
+        "expected_tickets": ["TKT-99"],
+        "uses_kb": True
+    },
+    {
+        "id": 23,
+        "question": "For the Acme Corp critical issue, what escalation path should I follow?",
+        "category": "Hybrid",
+        "expected_keywords": ["Acme Corp", "critical", "escalation"],
+        "expected_tickets": ["TKT-99"],
+        "uses_kb": True
     }
 ]
 
@@ -184,6 +252,26 @@ CONVERSATION_SCENARIOS = [
                 "role": "user",
                 "content": "What's the customer for the critical one?",
                 "expected_keywords": ["Acme Corp"]
+            }
+        ]
+    },
+    {
+        "name": "Knowledge + Ticket Flow",
+        "turns": [
+            {
+                "role": "user",
+                "content": "What data conflicts are there?",
+                "expected_keywords": ["TKT-101", "TKT-108", "conflict"]
+            },
+            {
+                "role": "user",
+                "content": "How do I resolve the Salesforce vs ServiceNow conflict?",
+                "expected_keywords": ["sync", "resolve", "procedure"]
+            },
+            {
+                "role": "user",
+                "content": "Apply that guidance to help me understand TKT-101 better",
+                "expected_keywords": ["TKT-101"]
             }
         ]
     }

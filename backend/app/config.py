@@ -19,6 +19,12 @@ class Settings(BaseSettings):
     bedrock_model_chat: str = "amazon.nova-lite-v1:0"
     bedrock_model_action: str = "amazon.nova-pro-v1:0"
 
+    # AWS Bedrock Knowledge Base
+    knowledge_base_id: str = "WKSR8FEXOD"
+    knowledge_base_region: str = "us-west-2"
+    knowledge_base_min_score: float = 0.4
+    knowledge_base_max_results: int = 5
+
     # API Configuration
     api_host: str = "0.0.0.0"
     api_port: int = 8000
