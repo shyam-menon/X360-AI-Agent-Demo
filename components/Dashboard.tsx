@@ -45,7 +45,7 @@ const BriefingCard: React.FC<BriefingCardProps> = ({ item, onClick }) => {
                {item.type.replace('_', ' ')}
              </div>
              <div className="text-xs text-slate-500 font-mono">
-               ID: {item.relatedTicketIds[0]}
+               ID: {item.id}
              </div>
           </div>
         </div>

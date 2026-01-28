@@ -3,6 +3,7 @@ Briefing Agent (Night Watchman) - Analyzes virtualization layer data.
 """
 
 from strands import Agent
+from strands_tools import current_time
 from typing import List, Dict
 import os
 import json
@@ -16,6 +17,16 @@ Your purpose:
 - Detect SLA breaches (tickets approaching or past due dates)
 - Identify data conflicts between systems (duplicates, inconsistencies)
 - Surface actionable insights (patterns, urgent items, resource bottlenecks)
+
+## Available Tools:
+
+### current_time
+Use to get the current date and time when needed for:
+- Determining if tickets are overdue (past their dueDate)
+- Identifying tickets approaching SLA breach (near their dueDate)
+- Any date/time comparisons with ticket dates
+
+The tool returns current time in ISO 8601 format. Compare date portions with ticket dueDate fields.
 
 Return structured JSON with:
 - summary: Brief overview of system health
@@ -31,7 +42,8 @@ class BriefingAgent:
         print(f"[DEBUG] BriefingAgent initializing with model: {model_id}")
         self.agent = Agent(
             model=model_id,
-            system_prompt=SYSTEM_INSTRUCTION_NIGHT_WATCHMAN
+            system_prompt=SYSTEM_INSTRUCTION_NIGHT_WATCHMAN,
+            tools=[current_time]
         )
 
     async def analyze_data(self, data: List[dict]) -> dict:
@@ -60,7 +72,7 @@ DATA:
 {data_context}
 
 Identify:
-1. SLA breaches (tickets near or past due date - compare dueDate to today's date 2026-01-24)
+1. SLA breaches (tickets near or past due date - use the current_time tool to get today's date, then compare with each ticket's dueDate field)
 2. Data conflicts (duplicate tickets with same ID but different statuses or priorities)
 3. Important insights (patterns, urgent items)
 
