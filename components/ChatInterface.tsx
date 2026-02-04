@@ -136,7 +136,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ history, onSendMes
   };
 
   return (
-    <div className={`flex flex-col h-[calc(100vh-8rem)] bg-slate-900/80 backdrop-blur border rounded-2xl overflow-hidden shadow-2xl transition-colors duration-500 ${isDoMode ? 'border-emerald-900/50' : 'border-slate-800'}`}>
+    <div className={`flex flex-col h-full bg-slate-900/80 backdrop-blur border rounded-2xl overflow-hidden shadow-2xl transition-colors duration-500 ${isDoMode ? 'border-emerald-900/50' : 'border-slate-800'}`}>
       
       {/* Header */}
       <div className={`p-4 border-b flex items-center justify-between ${isDoMode ? 'bg-emerald-950/30 border-emerald-900/30' : 'bg-slate-950/80 border-slate-800'}`}>
