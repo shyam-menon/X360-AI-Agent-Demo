@@ -6,6 +6,15 @@ from pydantic import BaseModel
 from typing import List, Literal, Optional
 
 
+class Citation(BaseModel):
+    """Knowledge base source citation."""
+    score: float
+    documentId: str
+    sourceUri: Optional[str] = None
+    chunkId: Optional[str] = None
+    dataSourceId: Optional[str] = None
+
+
 class ChatMessage(BaseModel):
     """Individual chat message in conversation history."""
 
@@ -29,3 +38,4 @@ class ChatResponse(BaseModel):
 
     response: str
     timestamp: int
+    citations: Optional[List[Citation]] = None

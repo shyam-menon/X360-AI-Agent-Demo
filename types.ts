@@ -32,12 +32,21 @@ export enum TicketStatus {
     summary: string;
     items: BriefingItem[];
   }
-  
+
+  export interface Citation {
+    score: number;
+    documentId: string;
+    sourceUri?: string;
+    chunkId?: string;
+    dataSourceId?: string;
+  }
+
   export interface ChatMessage {
     role: "user" | "model";
     content: string;
     timestamp: number;
     isAction?: boolean; // If true, renders a special UI for "Do" actions
+    citations?: Citation[];
   }
 
   export type ViewMode = "TELL" | "ASK" | "DO" | "DATA";

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { ChatMessage, BriefingItem } from '../types';
-import { Send, CheckCircle, Activity, Layers, MessageSquare, AlertTriangle, ArrowRight, Trash } from './Icons';
+import { ChatMessage, BriefingItem, Citation } from '../types';
+import { Send, CheckCircle, Activity, Layers, MessageSquare, AlertTriangle, ArrowRight, Trash, FileText } from './Icons';
 
 interface ChatInterfaceProps {
   history: ChatMessage[];
@@ -83,6 +83,63 @@ const FormattedMessage = ({ content }: { content: string }) => {
 
         return <p key={idx} className="text-slate-300 leading-relaxed">{parts}</p>;
       })}
+    </div>
+  );
+};
+
+// Citations Display Component
+const CitationsDisplay = ({ citations }: { citations: Citation[] }) => {
+  const [expanded, setExpanded] = useState(false);
+
+  if (!citations || citations.length === 0) return null;
+
+  return (
+    <div className="mt-4 border-t border-slate-700 pt-3">
+      <button
+        onClick={() => setExpanded(!expanded)}
+        className="flex items-center gap-2 text-xs text-slate-400 hover:text-blue-400 transition-colors w-full text-left"
+      >
+        <FileText className="w-3.5 h-3.5" />
+        <span className="font-semibold">
+          {citations.length} Knowledge Base {citations.length === 1 ? 'Source' : 'Sources'}
+        </span>
+        <span className="ml-auto">{expanded ? '▼' : '▶'}</span>
+      </button>
+
+      {expanded && (
+        <div className="mt-3 space-y-2">
+          {citations.map((citation, idx) => (
+            <div
+              key={idx}
+              className="p-3 bg-slate-900/50 border border-slate-700 rounded-lg text-xs"
+            >
+              <div className="flex items-start justify-between gap-2 mb-1">
+                <span className="font-mono text-blue-400 font-semibold">Source {idx + 1}</span>
+                <span className="text-slate-500">Score: {citation.score.toFixed(3)}</span>
+              </div>
+
+              {citation.sourceUri && (
+                <div className="mt-2">
+                  <a
+                    href={citation.sourceUri}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-400 hover:text-blue-300 underline break-all"
+                  >
+                    {citation.sourceUri}
+                  </a>
+                </div>
+              )}
+
+              {citation.documentId && !citation.sourceUri && (
+                <div className="mt-1 text-slate-400 font-mono text-[10px]">
+                  Doc: {citation.documentId}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
@@ -259,7 +316,12 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ history, onSendMes
               }`}
             >
               <FormattedMessage content={msg.content} />
-              
+
+              {/* Show citations if available (only for model messages) */}
+              {msg.role === 'model' && msg.citations && (
+                <CitationsDisplay citations={msg.citations} />
+              )}
+
               {/* ACTION CARD LOGIC */}
               {/* Check if the message contains actionable keywords like Task, Playbook, or email */}
               {msg.role === 'model' && (msg.content.includes('Task') || msg.content.includes('Playbook') || msg.content.includes('email') || isDoMode) && msg.content.length > 50 && (

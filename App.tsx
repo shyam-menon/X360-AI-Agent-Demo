@@ -60,17 +60,28 @@ function App() {
     setHistory(newHistory);
 
     // Get response - pass mode and context to backend
-    const response = await sendChatMessage(
+    const apiResponse = await sendChatMessage(
       newHistory,
       msg,
       isDoMode ? 'DO' : 'ASK',
       { data: RAW_CHAOTIC_DATA, briefing: briefing || undefined }
     );
 
+    console.log('[CITATIONS DEBUG] API response:', {
+      hasCitations: !!apiResponse.citations,
+      citationsCount: apiResponse.citations?.length || 0,
+      citations: apiResponse.citations
+    });
+
     // Update with response
     setHistory(prev => [
       ...prev,
-      { role: 'model', content: response, timestamp: Date.now() }
+      {
+        role: 'model',
+        content: apiResponse.response,
+        timestamp: Date.now(),
+        citations: apiResponse.citations
+      }
     ]);
     setIsChatTyping(false);
   };
@@ -85,16 +96,21 @@ function App() {
     setIsChatTyping(true);
 
     // 3. Trigger the response from the model in the Actions context
-    const response = await sendChatMessage(
+    const apiResponse = await sendChatMessage(
       newHistory,
       command,
       'DO',
       { data: RAW_CHAOTIC_DATA, briefing: briefing || undefined }
     );
-    
+
     setActionHistory(prev => [
       ...prev,
-      { role: 'model', content: response, timestamp: Date.now() }
+      {
+        role: 'model',
+        content: apiResponse.response,
+        timestamp: Date.now(),
+        citations: apiResponse.citations
+      }
     ]);
     setIsChatTyping(false);
   };

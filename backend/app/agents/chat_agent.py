@@ -15,6 +15,7 @@ from app.config import settings
 os.environ.setdefault("KNOWLEDGE_BASE_ID", settings.knowledge_base_id)
 os.environ.setdefault("AWS_REGION", settings.knowledge_base_region)
 os.environ.setdefault("MIN_SCORE", str(settings.knowledge_base_min_score))
+os.environ.setdefault("RETRIEVE_ENABLE_METADATA_DEFAULT", "true")
 
 SYSTEM_INSTRUCTION_CHAT = """
 You are an AI agent assistant for X360, a virtualized ops platform.
@@ -63,12 +64,41 @@ Be concise and actionable. Reference specific ticket IDs when relevant.
 """
 
 
+def extract_citations_from_text(response_text: str) -> List[Dict]:
+    """Extract citation metadata from retrieve tool output."""
+    citations = []
+    lines = response_text.split('\n')
+
+    current_citation = {}
+    for line in lines:
+        if line.startswith('Score: '):
+            if current_citation:
+                citations.append(current_citation)
+            current_citation = {'score': float(line.split(': ')[1])}
+        elif line.startswith('Document ID: '):
+            current_citation['documentId'] = line.split(': ', 1)[1]
+        elif line.startswith('Metadata: ') and 'x-amz-bedrock-kb-source-uri' in line:
+            import ast
+            try:
+                metadata_str = line.split(': ', 1)[1]
+                metadata = ast.literal_eval(metadata_str)
+                current_citation['sourceUri'] = metadata.get('x-amz-bedrock-kb-source-uri', '')
+                current_citation['chunkId'] = metadata.get('x-amz-bedrock-kb-chunk-id', '')
+                current_citation['dataSourceId'] = metadata.get('x-amz-bedrock-kb-data-source-id', '')
+            except:
+                pass
+
+    if current_citation:
+        citations.append(current_citation)
+
+    return citations if citations else None
+
+
 class ChatAgent:
     """Agent for handling ASK mode chat interactions."""
 
     def __init__(self):
         model_id = os.getenv("BEDROCK_MODEL_CHAT", "amazon.nova-lite-v1:0")
-        print(f"[DEBUG] ChatAgent initializing with model: {model_id}")
         self.agent = Agent(
             model=model_id,
             system_prompt=SYSTEM_INSTRUCTION_CHAT
@@ -87,7 +117,7 @@ class ChatAgent:
         tickets = context_data.get('data', [])
         return [t for t in tickets if t.get('id') in ticket_ids]
 
-    async def chat(self, message: str, history: List[dict], context: dict) -> str:
+    async def chat(self, message: str, history: List[dict], context: dict) -> Dict:
         """
         Process chat message with conversation history and context.
 
@@ -97,7 +127,7 @@ class ChatAgent:
             context: Context including data and briefing
 
         Returns:
-            Agent's response string
+            Dict with 'response' (str) and 'citations' (List[dict] or None)
         """
 
         # Add tools with context (both ticket queries and knowledge base)
@@ -130,12 +160,64 @@ USER: {message}
 
 AGENT:"""
 
+        def search_for_retrieve_in_trace(trace_dict, depth=0):
+            """Recursively search for retrieve tool in trace tree."""
+            trace_name = trace_dict.get('name', 'unknown')
+
+            # Check if this is the retrieve tool (name could be 'retrieve' or 'Tool: retrieve')
+            if trace_name == 'retrieve' or 'retrieve' in trace_name.lower():
+                # Look for the tool output in the message
+                if 'message' in trace_dict:
+                    message = trace_dict['message']
+
+                    if isinstance(message, dict) and 'content' in message:
+                        tool_output = message['content']
+
+                        # The retrieve tool returns: [{'text': 'formatted citation text'}]
+                        if isinstance(tool_output, list) and len(tool_output) > 0:
+                            content_block = tool_output[0]
+                            if isinstance(content_block, dict) and 'text' in content_block:
+                                citation_text = content_block['text']
+                                return extract_citations_from_text(citation_text)
+
+                        # Fallback: if tool_output is a string
+                        elif isinstance(tool_output, str):
+                            return extract_citations_from_text(tool_output)
+
+            # Recursively search children
+            if 'children' in trace_dict and trace_dict['children']:
+                for child_trace in trace_dict['children']:
+                    result = search_for_retrieve_in_trace(child_trace, depth + 1)
+                    if result:
+                        return result
+
+            return None
+
         try:
             response = agent_with_tools(full_prompt)
-            return str(response)
+            response_text = str(response)
+
+            # Extract citations from AgentResult traces
+            citations = None
+            if hasattr(response, 'metrics') and hasattr(response.metrics, 'traces'):
+                for trace in response.metrics.traces:
+                    trace_dict = trace.to_dict() if hasattr(trace, 'to_dict') else trace.__dict__
+                    citations = search_for_retrieve_in_trace(trace_dict)
+                    if citations:
+                        break
+
+            print(f"[CITATIONS DEBUG] Extracted citations: {citations}")
+
+            return {
+                "response": response_text,
+                "citations": citations
+            }
         except Exception as e:
             print(f"Chat agent error: {e}")
-            return "I am having trouble connecting to the X360 core. Please check your connection."
+            return {
+                "response": "I am having trouble connecting to the X360 core. Please check your connection.",
+                "citations": None
+            }
 
 
 # Initialize agent instance

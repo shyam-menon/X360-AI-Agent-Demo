@@ -1,4 +1,4 @@
-import { BriefingResponse, ChatMessage, Ticket } from "../types";
+import { BriefingResponse, ChatMessage, Ticket, Citation } from "../types";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
 
@@ -43,7 +43,7 @@ export const sendChatMessage = async (
     data?: Ticket[];
     briefing?: BriefingResponse;
   }
-): Promise<string> => {
+): Promise<{ response: string; citations?: Citation[] }> => {
   try {
     const response = await fetch(`${API_BASE_URL}/api/v1/chat`, {
       method: 'POST',
@@ -63,10 +63,22 @@ export const sendChatMessage = async (
     }
 
     const result = await response.json();
-    return result.response;
+    console.log('[CITATIONS DEBUG] Backend response:', {
+      hasResponse: !!result.response,
+      hasCitations: !!result.citations,
+      citationsCount: result.citations?.length || 0,
+      citations: result.citations
+    });
+    return {
+      response: result.response,
+      citations: result.citations
+    };
   } catch (error) {
     console.error('Backend Chat Error:', error);
-    return "I am having trouble connecting to the X360 core. Please check your connection.";
+    return {
+      response: "I am having trouble connecting to the X360 core. Please check your connection.",
+      citations: undefined
+    };
   }
 };
 
