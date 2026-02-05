@@ -197,6 +197,12 @@ AGENT:"""
             response = agent_with_tools(full_prompt)
             response_text = str(response)
 
+            # Extract just the <response> content if present, otherwise use full text
+            import re
+            response_match = re.search(r'<response>(.*?)</response>', response_text, re.DOTALL)
+            if response_match:
+                response_text = response_match.group(1).strip()
+
             # Extract citations from AgentResult traces
             citations = None
             if hasattr(response, 'metrics') and hasattr(response.metrics, 'traces'):

@@ -52,12 +52,57 @@ const FormattedMessage = ({ content }: { content: string }) => {
         if (isBullet) cleanText = trimmed.substring(2);
         if (isNumber) cleanText = trimmed.replace(/^\d+\.\s/, '');
 
-        const parts = cleanText.split(/(\*\*.*?\*\*)/g).map((part, partIdx) => {
-          if (part.startsWith('**') && part.endsWith('**')) {
-            return <strong key={partIdx} className="font-bold text-white">{part.slice(2, -2)}</strong>;
+        // Parse both bold text (**text**) and markdown links [text](url)
+        const parts: React.ReactNode[] = [];
+        let currentText = cleanText;
+        let partIdx = 0;
+
+        while (currentText.length > 0) {
+          // Check for markdown link [text](url)
+          const linkMatch = currentText.match(/\[([^\]]+)\]\(([^)]+)\)/);
+          if (linkMatch) {
+            const beforeLink = currentText.substring(0, linkMatch.index);
+            const linkText = linkMatch[1];
+            const linkUrl = linkMatch[2];
+
+            // Add text before the link (with bold parsing)
+            if (beforeLink) {
+              beforeLink.split(/(\*\*.*?\*\*)/g).forEach((segment, segIdx) => {
+                if (segment.startsWith('**') && segment.endsWith('**')) {
+                  parts.push(<strong key={`${partIdx}-${segIdx}`} className="font-bold text-white">{segment.slice(2, -2)}</strong>);
+                } else if (segment) {
+                  parts.push(<span key={`${partIdx}-${segIdx}`}>{segment}</span>);
+                }
+              });
+            }
+
+            // Add the link
+            parts.push(
+              <a
+                key={`link-${partIdx}`}
+                href={linkUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-400 hover:text-blue-300 underline break-all"
+              >
+                {linkText}
+              </a>
+            );
+
+            currentText = currentText.substring((linkMatch.index || 0) + linkMatch[0].length);
+            partIdx++;
+          } else {
+            // No more links, parse remaining text for bold
+            currentText.split(/(\*\*.*?\*\*)/g).forEach((segment, segIdx) => {
+              if (segment.startsWith('**') && segment.endsWith('**')) {
+                parts.push(<strong key={`${partIdx}-${segIdx}`} className="font-bold text-white">{segment.slice(2, -2)}</strong>);
+              } else if (segment) {
+                parts.push(<span key={`${partIdx}-${segIdx}`}>{segment}</span>);
+              }
+            });
+            break;
           }
-          return <span key={partIdx}>{part}</span>;
-        });
+        }
 
         if (isBullet) {
           return (
